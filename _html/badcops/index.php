@@ -8,9 +8,6 @@
 echo "<h1>Welcome to BadCops Homepage ! </h1>";
 
 echo "<br>";
-echo "RPM: ";
-include 'signature';
-echo "<br>";
 echo "Host is : " . gethostname() . "<br>";
 echo "Time is  : " . date("Y-m-d H:i:s") . "<br>";
 echo "Requested URI is : " . $_SERVER['REQUEST_URI'] . "<br>";
