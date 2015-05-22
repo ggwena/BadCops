@@ -3,7 +3,7 @@
 %define confddir /opt/application/bad/apache2215/current/conf.d
 
 Name:		badcops
-Version:	1.2
+Version:	1.3
 Release:	0
 Summary:	A minimalist app for an automatic cloud deployement
 
@@ -47,14 +47,33 @@ rm -rf $RPM_BUILD_DIR/*
 rm -rf $RPM_BUILD_ROOT
 
 %files
-#%defattr(-,root,root,-)
-#%doc
 %defattr(660,bad,bad)
 %{applidir}/*
-%{confddir}/vhost-bad.conf
+%attr(550, apache, apache) %{confddir}/vhost-bad.conf
+
+%pre
+echo "[%{name}] Installing ..."
+%post
+service httpd restart
+echo "[%{name}] Service Status Check:"
+curl http://localhost/test --noproxy localhost 
+exit 0
+
+%preun
+if [ "$1" = 0 ] ; then
+service httpd stop
+fi
+exit 0
+%postun
+if [ "$1" = 0 ] ; then
+service httpd start
+fi
+exit 0
+
 
 %changelog
 # add date with date +"%a %b %d %Y" format
 * Tue May 20 2015 Gwenael Lord <glord.ext@orange.com> - 1.0-0
 - ver 1.0 first build
 - ver 1.2 vhost.conf included
+- ver 1.3 added pre/post scripts

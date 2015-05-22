@@ -28,7 +28,7 @@ echo "### [BadCops] ready to install last RPM ? ([y]/n) "
 read ret
 [ -n "$ret" ] && [ "$ret" != "y" ] && exit 0
 
-sudo rpm -Uv $LASTRPM
+sudo rpm -Uv $LASTRPM --force
 
 echo "### [BadCops] finished"
 cd -
