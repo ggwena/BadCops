@@ -1,4 +1,5 @@
 #!/bin/bash
+[ "$1" == "-a" ] && auto="yes"
 
 echo "### [BadCops] build all "
 echo "### [BadCops] edit badcops.spec "
@@ -12,8 +13,7 @@ SPECFILE=$(ls -tr SPECS/*.spec | tail -1)
 echo SPECFILE=$SPECFILE
 
 echo "### [BadCops] ready to build $SPECFILE ? ([y]/n) "
-read ret
-[ -n "$ret" ] && [ "$ret" != "y" ] && exit 0
+[ -z "$auto" ] && read ret && [ -n "$ret" ] && [ "$ret" != "y" ] && exit 0
 
 
 rpmbuild -bb $SPECFILE
@@ -25,8 +25,7 @@ LASTRPM=$(ls -tr RPMS/noarch/*.rpm | tail -1)
 echo "### [BadCops] Last RPM: $LASTRPM"
 
 echo "### [BadCops] ready to install last RPM ? ([y]/n) "
-read ret
-[ -n "$ret" ] && [ "$ret" != "y" ] && exit 0
+[ -z "$auto" ] && read ret && [ -n "$ret" ] && [ "$ret" != "y" ] && exit 0
 
 sudo rpm -Uv $LASTRPM --force
 

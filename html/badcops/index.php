@@ -14,8 +14,7 @@ echo "<br>";
 echo "Host is : " . gethostname() . "<br>";
 echo "Time is  : " . date("Y-m-d H:i:s") . "<br>";
 echo "Requested URI is : " . $_SERVER['REQUEST_URI'] . "<br>";
-echo "<br>";
-
+echo "<br><hr width=600px size=7px>";
 # $log.="Date: " . date("Y-m-d H:i:s");
 $log="Sur [" . gethostname() . "] ";
 $log.="Srv: " . "BadCops ";
@@ -25,50 +24,84 @@ echo "log= <code>" . $log ."</code><br>";
 $ret = syslog(LOG_INFO, $log);
 if ( $ret != 1 )
   echo 'ERROR logging "'.$log.'"<br>';
-
+echo "<br><hr width=600px size=7px>";
 ?>
 
-<h3>Form</h3>
+<form action="" >
+<fieldset><legend>Enlever les parametres GET de lURL</legend>
+<input type="submit"  VALUE="Nettoyer URL">
+</fieldset>
+</form>
+<br><hr width=600px size=7px>
 
-Message = "<?php echo $_GET["message"]; ?>"<br>
-Priority = "<?php echo $_GET["priority"]; ?>"<br><br>
-
-<?php
-$message = $_GET["message"];
-$priority = $_GET["priority"];
-if ( $message ) { 
-  $log="[BadCops] ";
-  $log.="[".gethostname() . "] ";
-  if ( $priority ) $log.="[".$priority."] ";  
-  $log.="addLog(\"".$message."\")";
-  echo "New log line:<code>" . $log ."</code><br>";
-  $ret = syslog(LOG_INFO, $log);
-  if ( $ret != 1 )
-    echo 'ERROR logging <code>"'.$log.'"<code><br>';
-} else
-  echo "NO PARAMETERS: priority or message.<br>"
-
-?>
-
+<h3>Logs</h3>
+<blockquote>
+  <?php
+  // isset($_GET['message']) ? $_GET['message'] : 'wtf';
+  if ( $message=isset($_GET['message']) ? $_GET['message'] : null ) {  
+    echo "Write message to logs:<br>";
+  
+    $log="[BadCops] "."[".gethostname()."] ";
+    if ( $priority=isset($_GET['priority']) ? $_GET['priority'] : null ) 
+      $log.="[".$priority."] ";  
+    $log.="addLog(\"".$message."\")";
+    echo "New log line: <code>" . $log ."</code><br>";
+    $ret = syslog(LOG_INFO, $log);
+    if ( $ret != 1 ) 
+      echo 'ERROR logging <code>"'.$log.'"<code><br>';
+  } /* else
+    echo "No messages to write to logs.<br>" */
+  ?>
+</blockquote>
 
 <form action="" method="get">
+<fieldset><legend>Entrer une message specifique dans les logs</legend>
 Enter log message: <input type="text" name="message"><br>
-Priority:
-<select name="priority">
+Priority: <select name="priority">
 <option value="LOG_CRIT">LOG_CRIT</option>
 <option value="LOG_ERR">LOG_ERR</option>
 <option value="LOG_WARNING">LOG_WARNING</option>
 <option value="LOG_INFO" selected>LOG_INFO</option>
 </select>
 <input type="submit">
-
+</fieldset>
 </form>
+<hr width=600px size=7px>
+
+
+<h3>Benchmarks</h3>
+<blockquote>
+  <?php
+  if ( $benchmark=isset($_GET['benchmark']) ? $_GET['benchmark'] : null ) {  
+    echo "Executing Benchmark<br>";
+    echo "(php.ini:max_execution_time= ".ini_get("max_execution_time")." sec. )";
+
+    switch ($benchmark) {
+        case 'php':
+            include 'bench.php';
+            echo "<br>Standard :  < 8s.";
+            break;
+        case label2:
+            break;
+        case label3:
+            break;
+        default:
+            echo "No benchmark code found for $benchmark.";
+    }
+  }   
+  ?>
+</blockquote>
+
+<form action="" method="get">
+<fieldset><legend>Executer un benchmark</legend>
+<input type="checkbox" name="benchmark" value="php" selected>php from www.php-benchmark-script.com </input>
+<br><input type="submit" name="Lancer!">
+</fieldset></form>
+<hr width=600px size=7px>
+
 
 <?php
-
-echo "<br><br><h3>TESTS ...</h3><br><br>";
-
- 
+echo "<br><hr width=600px size=7px><br><h3>TESTS ...</h3><br><br>";
 if ( isset($_SERVER)  ) 
 { 
   $toto = syslog(LOG_INFO, "Hello World. myappli logs!");
@@ -80,7 +113,7 @@ if ( isset($_SERVER)  )
   $keys = array( "SERVER_NAME", "SERVER_ADDR", "REMOTE_ADDR", "HTTP_HOST", 'REQUEST_URI' );
   for ($n = 0; $n < count($keys); $n++) {
     echo $keys[$n] . "  ==> " . $_SERVER[$keys[$n]] . "<br>";
-  }
+}
 #  $myarray = $_SERVER;
 #  foreach(array_keys($myarray) as $key) {
 #    echo $key . ":" . $_SERVER[$key] . "<br>";
@@ -107,7 +140,8 @@ if ( isset($_SERVER)  )
 
 ?>
 
-<?php  phpinfo() ?>
+<?php // phpinfo() 
+?>
 
 </body>
 </html>
