@@ -1,0 +1,39 @@
+#cloud-config
+bootcmd:
+   - echo "[DEBUG] by gwenn cloud-config bootcmd $(date)"
+   - [ cloud-init-per, instance, motd, sh, -c, 'echo "Cloud-init Started on $(date) " >> /etc/motd' ]
+#   - [ cloud-init-per, instance, proxy, sh, -c, 'echo "proxy=http://10.236.240.71:3128/" >> /etc/yum.conf' ]
+#   - [ cloud-init-per, instance, yum-rhel6, sh, -c, 'sed -i "s/enabled=0/enabled=1/" /etc/yum.repos.d/common-rhel6.repo' ]
+
+# write_files :
+  # - path: /etc/ntp.conf
+    # permissions: '0644'
+    # content: |
+      # driftfile /var/lib/ntp/drift
+      # restrict default kod nomodify notrap
+      # restrict 127.0.0.1
+      # server 10.236.40.68
+
+# yum_repos:
+  # rdo-icehouse-epel6:
+    # name: Red Hat OpenStack Iceouse for Enterprise Linux 6
+    # baseurl: https://repos.fedorapeople.org/repos/openstack/openstack-icehouse/epel-6/
+    # enabled: true
+    # gpgcheck: false
+# CentOs:
+      # baseurl: http://mirror.centos.org/centos/6/os/x86_64/
+      # name: CenOS $releasever - $basearch
+      # enabled: true
+      # gpgcheck: false
+
+package_upgrade: true
+
+packages:
+   - wget
+
+runcmd:
+   - echo "by gwenn cloud-config runcmd $(date)"
+   - grep -v DEBUG /var/log/cloud-init.log >> /etc/motd
+   - echo "Cloud-init Finished on $(date) " >> /etc/motd
+
+output: {all: '| tee -a /var/log/cloud-init.log'}

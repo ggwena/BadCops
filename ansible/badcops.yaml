@@ -1,0 +1,25 @@
+---
+- hosts: all
+  vars:
+   - docroot: /var/www/serversforhackers.com/public
+   - rpms_root: /home/osadmin/BadCops/rpmbuild/RPMS/noarch/
+   - badcops_latest: badcops-1.3-0.noarch.rpm
+
+  tasks:
+
+   - name: Copy rpm to images
+     copy: src={{ '{{' }} rpms_root {{ '}}' }}/{{ '{{' }} badcops_latest {{ '}}' }} dest=/images owner=root group=root
+  
+   - name: Install and force update BadCops rpm
+     # command: rpm -Uv /images/{{ '{{' }} badcops_latest {{ '}}' }} --force
+     command: wall "rpm -Uv /images/{{ badcops_latest }} --force"
+     register: badcopsinstalled
+     # notify:
+  
+   
+  # handlers:
+   # - name: Start Nginx
+     # service: name=nginx state=started
+
+    # - name: Reload Nginx
+      # service: name=nginx state=reloaded
