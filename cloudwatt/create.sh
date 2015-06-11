@@ -1,4 +1,5 @@
 #!/bin/sh
+echo tutu
 echo "### nova boot "
 nova boot --flavor t1.cw.tiny --image "CentOS 6.5" --key-name KP_BadCops-Dev_GLL --security-groups SSH_Only,SGrpAdmin --user_data user_data_file.yaml IN-BAD-DEV1-GLL-01
 echo "### sleep "
