@@ -18,3 +18,4 @@ nova floating-ip-associate IN-BAD-DEV1-GLL-01 84.39.35.168
 echo "### nova show "
 nova show IN-BAD-DEV1-GLL-01
 
+echo titi
