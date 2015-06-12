@@ -1,0 +1,40 @@
+[all:vars]
+# Name of your Servers in 'printf' Format.
+server_names=web-s%02x
+# How many server should be deployed?
+server_count=1
+
+OS_TENANT_NAME={{ lookup('env', 'OS_TENANT_NAME') }}
+OS_USERNAME={{ lookup('env', 'OS_USERNAME') }}
+OS_PASSWORD={{ lookup('env', 'OS_PASSWORD') }}
+OS_AUTH_URL={{ lookup('env', 'OS_AUTH_URL') }}
+
+# The id of the OpenStack image to use.
+image_id=198362fb-6182-4a8c-82d1-3646bdcdb778
+
+# The id of your network, default is the id in 'OS_TENANT_NET_ID' shell var.
+network_id={{ lookup('env', 'OS_TENANT_NET_ID') }}
+external_net=external_network
+
+# Availability zone works only with the provided nova_compute module
+availability_zone=nova
+
+# Your ssh key, default is the key in 'OS_TENANT_KEY' shell var.
+ssh_key={{ lookup('env', 'OS_TENANT_KEY') }}
+
+# Enter the security groups to use here.
+sec_groups="remote_mgmt,web"
+
+# The id of the OpenStack flavor to use.
+flavor_id=df896e15-8ed5-4a7b-b950-1039fc2ed0cf
+
+# If you have access to a apt-proxy enter the url here.
+#apt_proxy=http://apt-proxy.company.com:3142/
+
+# Apache config values
+ServerAdmin=ServerAdmin@company.com
+
+[localhost]
+# Helper Group for local actions only.
+127.0.0.1
+

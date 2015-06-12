@@ -26,10 +26,10 @@ bootcmd:
       # enabled: true
       # gpgcheck: false
 
-package_upgrade: true
+# package_upgrade: true
 
-packages:
-   - wget
+# packages:
+   # - wget
 
 runcmd:
    - echo "by gwenn cloud-config runcmd $(date)"

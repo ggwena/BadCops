@@ -1,0 +1,46 @@
+---
+- hosts: test
+  
+  tasks:
+  
+  - name: launch an instance
+    become: no
+    nova_compute:
+      name: vm1
+      state: present
+      login_username: "{{ lookup('env', 'OS_USERNAME') }}"
+      login_password: "{{ lookup('env', 'OS_PASSWORD') }}"
+      login_tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+      auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+      region_name: fr1
+      # image_id: d48f697e-7bb7-4c4d-b1c0-76674ac2cf47 # "CentOS 6.5"
+      image_id: 4a4fdbd8-68da-4026-83d0-d2492e19e40b # CB_G2R3_Cloud_03_20G
+      flavor_id: 16
+      # flavor_include: t1.cw.tiny
+      # flavor_ram: 4096
+      key_name: KP_BadCops-Dev_GLL
+      meta: 
+        titi: toto
+      security_groups: SGrpAdmin,SSH_Only
+      # user_data: $HOME/BadCops/cloudwatt/user_data_file.yaml
+      # user_data: "{{ lookup('file', '../cloudwatt/user_data_file.yaml') }}"
+      user_data: "#cloud-config\nmanage_etc_hosts: true"
+      # auto_floating_ip: yes
+      # floating_ip_pools: public
+      floating_ips: 
+        - "84.39.36.39"
+    register: instance
+  
+  # - debug: var=instance
+  - debug: msg="Server {{ instance.info.name }} created with ip={{ instance.private_ip }} ip={{ instance.public_ip }}" 
+
+  - name: Wait for cluster SSH to become available
+    wait_for:
+      port: 22
+      host: "{{ instance.private_ip }}"
+      timeout: 180
+      state: started
+    register: result
+     
+      
+  

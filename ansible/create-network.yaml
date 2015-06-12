@@ -1,0 +1,47 @@
+---
+- hosts: test
+  
+  tasks:
+  - debug: mesg="OS_TENANT_NAME={{ lookup('env', 'OS_TENANT_NAME') }}
+      OS_USERNAME={{ lookup('env', 'OS_USERNAME') }} 
+      auth_url= {{ lookup('env', 'OS_AUTH_URL') }}
+      tenant_name= {{ lookup('env', 'OS_TENANT_NAME') }} "
+  
+  
+  - name: create a security group
+    become: no
+    neutron_sec_group:
+      login_username: "{{ lookup('env', 'OS_USERNAME') }}"
+      login_password: "{{ lookup('env', 'OS_PASSWORD') }}"
+      login_tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+      login_tenant_id: "{{ lookup('env', 'OS_TENANT_ID') }}"
+      auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+      tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}" 
+      # tenant_name: "{{ lookup('env', 'OS_TENANT_ID') }}" 
+      name: external_network 
+      state: present
+      # provider_network_type: local 
+      # router_external: yes
+      # shared: no
+    register: result
+  
+  - debug: var=result
+  
+  - name: create a network
+    become: no
+    quantum_network:
+      login_username: "{{ lookup('env', 'OS_USERNAME') }}"
+      login_password: "{{ lookup('env', 'OS_PASSWORD') }}"
+      login_tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+      auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+      # tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}" 
+      tenant_name: "{{ lookup('env', 'OS_TENANT_ID') }}" 
+      name: external_network 
+      state: present
+      # provider_network_type: local 
+      # router_external: yes
+      # shared: no
+    register: result
+  
+  - debug: var=result
+

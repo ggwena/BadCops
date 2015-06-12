@@ -1,0 +1,6 @@
+[rdo-icehouse]
+name=Red Hat OpenStack Iceouse for Enterprise Linux 6
+baseurl=https://repos.fedorapeople.org/repos/openstack/openstack-icehouse/epel-6/
+enabled=1
+gpgcheck=0
+
