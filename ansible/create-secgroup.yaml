@@ -35,22 +35,3 @@
     register: result
   
   - debug: var=result
-  # - fail: msg="fail"
-  
-  # - name: create a network
-    # become: no
-    # quantum_network:
-      # login_username: "{{ lookup('env', 'OS_USERNAME') }}"
-      # login_password: "{{ lookup('env', 'OS_PASSWORD') }}"
-      # login_tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}"
-      # login_tenant_id: "{{ lookup('env', 'OS_TENANT_ID') }}"
-      # auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
-      # name: external_network 
-      # state: present
-      # # provider_network_type: local 
-      # # router_external: yes
-      # # shared: no
-    # register: result
-  
-  # - debug: var=result
-

@@ -1,0 +1,17 @@
+---
+# playbook: gwenn.yaml
+# - hosts: localhost
+  # roles:
+    # - gwenn
+  # - tasks:
+    # - debug: msg="hello playbook gwenn.yaml"
+    # - debug: msg="[GWENN] code={{code}} PF_number={{ PF_number}}"
+    - debug: msg="[GWENN] PF_APP={{PF_APP}}"
+    - debug: msg="Creating {{item}} ."
+      with_sequence: start=1 end={{PF_number}} format=IN-BAD-DEV1-GLL-%02x
+    # - debug: msg="j'ai {{ item }}"
+      # with_items: "{{a}}"
+      # # with_items: "{{g_APP.DB}}"
+    # - debug: msg="For {{ item.key }} need to create {{ item.value.code }} , but {{ item.value.number }} times!"
+      # with_dict: "{{g_APP}}"
+

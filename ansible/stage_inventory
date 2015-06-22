@@ -1,0 +1,9 @@
+[all:vars]
+# Name of your Servers in 'printf' Format.
+server_names=uaBadCops-s%02x
+# How many server should be deployed?
+server_count=3
+
+frontend_server_count=2
+database_server_count=3
+backend_server_count=1

@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  roles:
+    - cloudwatt
+  tags: gwenn
+
+- hosts: my_test
+  roles:
+    - create-instance
+
+- hosts: DB
+  tasks:
+#    - debug:
+#        msg: "Bonjour, je suis {{ inventory_hostname }} du groupe {{ groups }}! "
+  tags: gwenn
+
+

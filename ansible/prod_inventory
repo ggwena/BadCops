@@ -1,0 +1,9 @@
+[all:vars]
+# Name of your Servers in 'printf' Format.
+server_names=opBadCops-s%02x
+# How many server should be deployed?
+prefix=op
+
+PF_def=[{"group":"DB_servers","name":"DB_01"},{"group":"DB_servers","name":"DB_02"},{"group":"Tools_servers","name":"TO_01"},{"group":"FrontEnd_servers","name":"FE_01"}]
+ 
+

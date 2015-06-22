@@ -2,5 +2,7 @@
 127.0.0.1
 [bad-dev1]
 localhost
-[test]
+[openstack]
 192.168.0.6
+[test]
+192.168.0.3

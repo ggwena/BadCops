@@ -1,0 +1,38 @@
+---
+# file: /etc/ansible/group_vars/all
+# this is the site wide default
+ntp_server: default-time.example.com
+
+
+#servers_list: "{% for item in PF_def %}{% for i in range(0,(item.number|int)) %}\"[\"'name_server':'{{item.prefix}}_{{ server_names|format(i+1) }}','name_group':'{{item.group}}']{% if not loop.last %},{% endif %}{% endfor %}{% if not loop.last %},{% endif %}{% endfor %}"]
+
+#servers_list: "{% for item in PF_def %}{% for i in range(0,(item.number|int)) %}
+#  {{item.prefix}}_{{ i+1 }}: 
+#    name:{{item.prefix}}_{{ server_names|format(i+1) }}
+#    group:{{item.group}}]{% endfor %}{% endfor %}"
+
+
+#servers_list: 
+#  DB_01:
+#    name: DB_opBadCops-s01
+#    group: DB_servers
+#  DB_02:
+#    name: DB_opBadCops-s02
+#    group: DB_servers
+
+
+#servers_list: "{{servers_list_pre.split('#') }}"
+
+g_APP:
+  TYPE_DB: 
+    code: DB
+    number: 3
+  TYPE_FE:
+    code: FE
+    number: 2
+
+a: b c d
+  e f
+  g
+
+PF_number: 1

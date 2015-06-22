@@ -1,0 +1,32 @@
+---
+#- add_host:
+#    name: "test_{{ item }}"
+#    ansible_ssh_host: 127.0.0.1
+#    groups: my_test
+#    ansible_connection: local
+#    oshost: "{{ item }}"
+#  with_items: tests 
+
+
+- debug:
+    msg: "Mon serveur {{ prefix}}_{{ item.name }} se trouve dans {{ item.group }}"
+  with_items: PF_def 
+    
+
+#- add_host:
+#    name: "test_{{ item }}"
+#    ansible_ssh_host: 127.0.0.1
+#    groups: my_test
+#    ansible_connection: local
+#    oshost: "{{ item }}"
+#  with_sequence: count={{ server_count }} format={{ server_names }}
+#
+#- add_host:
+#    name: "{{ db_prefix }}_DB_{{ item }}"
+#    ansible_ssh_host: 127.0.0.1
+#    groups: DB
+#    ansible_connection: local
+#    oshost: "{{ item }}"
+#  with_sequence: count={{ server_count }} format={{ server_names }}
+
+
