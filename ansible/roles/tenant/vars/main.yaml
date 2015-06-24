@@ -1,0 +1,74 @@
+---
+# file: roles/tenant/vars/main.yaml
+
+PF_prefix_default_default: IN_BAD_TST
+
+PF_APP_code_default: XXX
+PF_APP_group_default: YYY
+PF_APP_number_default: 1
+PF_APP_image_id_default: 4a4fdbd8-68da-4026-83d0-d2492e19e40b # CB_G2R3_Cloud_03_20G
+  # - image_id: d48f697e-7bb7-4c4d-b1c0-76674ac2cf47 # "CentOS 6.5"
+  # - image_id: 4a4fdbd8-68da-4026-83d0-d2492e19e40b # CB_G2R3_Cloud_03_20G
+PF_APP_flavor_id_default: 16 
+PF_APP_key_name_default: KP_BadCops-Dev_GLL
+PF_APP_security_groups_default: default
+PF_APP_nics_net_id_default: da0612d8-f507-4dbb-912d-c20786ee184d
+
+PF_APP:
+  RTV_DB: 
+    code: RDB
+    group: RTV_DB
+  RTV_RTE: 
+    code: RTE
+    group: RTV_RTE
+    number: 2
+  RTV_WC: 
+    code: WC
+    number: 3
+    # group: RTV_WC
+    image_id: "d48f697e-7bb7-4c4d-b1c0-76674ac2cf47"
+    # flavor_id: 17
+    security_groups: "default,SSH_Only"
+    # nics_net_id: "c65b4845-fdae-4196-b68b-865ec32dbc84"
+
+
+### nova image-list
+# +--------------------------------------+------------------------------------------------------------------+
+# | ID                                   | Name                                                             |
+# +--------------------------------------+------------------------------------------------------------------+
+# | 4a4fdbd8-68da-4026-83d0-d2492e19e40b | CB_G2R3_Cloud_03_20G                                             |
+# | d48f697e-7bb7-4c4d-b1c0-76674ac2cf47 | CentOS 6.5                                                       |
+# | 168f7c6b-20a6-4a4e-8052-d1200aa36a1e | Debian Jessie                                                    |
+# | e765ce0a-2121-4243-81aa-f04773171940 | Debian Wheezy                                                    |
+# | 21023fb9-0a28-43a2-bcd9-2fca85670888 | Ubuntu 12.04                                                     |
+# | ae3082cb-fac1-46b1-97aa-507aaa8f184f | Ubuntu 14.04                                                     |
+# +--------------------------------------+------------------------------------------------------------------+
+### nova flavor list
+# +----+-------------------+-----------+------+-------+
+# | ID | Name              | Memory_MB | Disk | VCPUs |
+# +----+-------------------+-----------+------+-------+
+# | 16 | t1.cw.tiny        | 629       | 20   | 1     |
+# | 17 | s1.cw.small-1     | 1792      | 50   | 1     |
+# | 18 | n1.cw.highcpu-2   | 3840      | 50   | 2     |
+# | 19 | n1.cw.highcpu-4   | 7680      | 50   | 4     |
+# | 20 | n1.cw.highcpu-8   | 15360     | 50   | 8     |
+# | 21 | n1.cw.standard-1  | 3840      | 50   | 1     |
+# | 22 | n1.cw.standard-2  | 7680      | 50   | 2     |
+# | 23 | n1.cw.standard-4  | 15360     | 50   | 4     |
+# | 24 | n1.cw.standard-8  | 30720     | 50   | 8     |
+# | 25 | n1.cw.standard-12 | 46080     | 50   | 12    |
+# | 26 | n1.cw.standard-16 | 61440     | 50   | 16    |
+# | 28 | n1.cw.highmem-2   | 13312     | 50   | 2     |
+# | 29 | n1.cw.highmem-4   | 26624     | 50   | 4     |
+# | 30 | n1.cw.highmem-8   | 53248     | 50   | 8     |
+# | 31 | n1.cw.highmem-12  | 79872     | 50   | 12    |
+# +----+-------------------+-----------+------+-------+
+
+### nova 
+# +--------------------------------------+-----------------+------+
+# | ID                                   | Label           | CIDR |
+# +--------------------------------------+-----------------+------+
+# | c65b4845-fdae-4196-b68b-865ec32dbc84 | reseau_interne2 | -    |
+# | 6ea98324-0f14-49f6-97c0-885d1b8dc517 | public          | -    |
+# | da0612d8-f507-4dbb-912d-c20786ee184d | reseau_interne1 | -    |
+# +--------------------------------------+-----------------+------+

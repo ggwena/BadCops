@@ -1,0 +1,81 @@
+---
+# file: roles/tenant/tasks/main.yaml
+
+# - tasks:
+
+### Add all the APPs to Dynamic Hosts Inventory
+    - debug: msg="APP={{PF_APP | to_nice_yaml}} "
+    
+    # - debug: msg="include= addhost2inventory.yaml APP={{PF_APP["RTV_RTE"]}} "
+    - include: addhost2inventory.yaml APP={{PF_APP["RTV_DB"]}} 
+    - include: addhost2inventory.yaml APP={{PF_APP["RTV_RTE"]}} 
+    - include: addhost2inventory.yaml APP={{PF_APP["RTV_WC"]}} 
+    
+    - include: instance_create.yaml APP={{PF_APP["RTV_WC"]}} 
+    
+    
+    
+    
+    # - include: addhost2inventory.yaml code={{PF_APP["RTE"]["code"]}} number={{PF_APP["RTE"]["number"]}}
+    # - include: addhost2inventory.yaml PF_APP=toto
+    # - include: addhost2inventory.yaml code={{g_APP["TYPE_FE"]["code"]}} PF_number={{g_APP["TYPE_FE"]["number"]}}
+    # - include: addhost2inventory.yaml 
+      # vars:
+        # code: '{{g_APP["TYPE_DB"]["code"]}}'
+        # PF_number: '{{g_APP["TYPE_DB"]["number"]}}'
+    
+    
+    # - debug: var=g_APP
+    # - debug: var=g_APP.TYPE_DB
+    # - debug: var=g_APP.TYPE_DB.code
+    # - debug: msg="pour l app {{ g_APP.TYPE_DB }}"
+    # - debug: msg="j'ai {{ item }}"
+      # with_items: "{{a}}"
+      # # with_items: "{{g_APP.DB}}"
+    # # - include: gwenn.yaml PF_APP=toto
+    # # - include: gwenn.yaml PF_number=2
+    # # - include: gwenn.yaml code={{ item.value.code }} PF_number={{ item.value.number }}
+      # # with_dict: "{{g_APP}}"
+    # # - include: gwenn.yaml PF_APP={{g_APP}}
+    # - debug: msg="For {{ item.key }} need to create {{ item.value.code }} , but {{ item.value.number }} times!"
+      # with_dict: "{{g_APP}}"
+    # - debug: msg="j'ai {{g_APP["TYPE_FE"]}}"
+    # - debug: msg="For {{g_APP["TYPE_FE"]}} need to create {{g_APP["TYPE_FE"]["code"]}} , but {{g_APP["TYPE_FE"]["number"]}} times!"
+    # - include: gwenn.yaml code={{g_APP["TYPE_FE"]["code"]}} PF_number={{g_APP["TYPE_FE"]["number"]}}
+    # - include: gwenn.yaml code={{g_APP["TYPE_DB"]["code"]}} PF_number={{g_APP["TYPE_DB"]["number"]}}
+
+    # - debug: msg="APPS= {{APPs}}"
+    # # - debug: msg=" my APP= {{APPs[0]}} code={{ g_APP[ "{{APPs[0]}}" ] }}"
+    # # code={{g_APP[{{APPs[0]}}]["code"]}} PF_number={{g_APP["TYPE_DB"]["number"]}}
+    # # - include: gwenn.yaml code={{g_APP["TYPE_DB"]["code"]}} PF_number={{g_APP["TYPE_DB"]["number"]}}
+
+    # - debug: var="{{usuarios}}"
+    # - debug: msg="usuario= {{ item.name }}"
+      # with_items: "{{usuarios}}"    
+    # - debug: msg="user={{ item.0.name }}"
+    # key= {{ item.1) }}"
+      # with_subelements: 
+        # - usuarios
+        # - authorized
+    # # - debug: msg="A= {{ item.0 }} et B= {{ item.1 }}"
+      # # with_subelements:
+        # # - [ 'a', 'b', 'c', 'd' ]
+        # # - "text"
+
+  # tags: gwenn
+
+# # - hosts: my_test
+  # # roles:
+    # # - create-instance
+
+# - hosts: DB
+  # tasks:
+# #    - debug:
+# #        msg: "Bonjour, je suis {{ inventory_hostname }} du groupe {{ groups }}! "
+  # tags: gwenn
+
+  # # - name: print to stdout
+    # # command: echo "hello"
+    # # register: hello
+  # # - debug: msg="{{ hello.stdout }}"
+  # # - debug: msg="{{ hello.stderr }}"

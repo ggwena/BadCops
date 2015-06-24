@@ -1,0 +1,29 @@
+---
+- name: add hosts to local inventory 
+  hosts: localhost
+  roles:
+    # - { name: tenant, ensure: present }
+  - tenant
+  tags: create
+  # serial: 1
+  tasks:
+    # - debug: msg="[tenant-create] Play-book a destination de {{ play_hosts }}"
+    - debug: msg="[tenant-create] Groups et leur hosts= {{groups|to_nice_yaml}}! "
+  # - debug: msg="[tenant-create] hosts= {{hostvars}}! "
+  
+
+# - hosts: all
+  # # serial: 1
+  # tasks:
+    # - debug: msg="[tenant-create] je suis {{ inventory_hostname }} du groupe {{ group_names }}! "
+    # # - debug: msg={{ ansible_ssh_host }}
+    # - ping:
+      # register: first_ping
+    # - name: rerun setup
+      # setup:
+    # - name: get hostname
+      # command: hostname
+      # register: hostname
+    # - debug: msg="{{ hostname.stdout }}"    
+      
+        
