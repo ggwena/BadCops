@@ -12,13 +12,14 @@
   # - debug: msg="[tenant-create] hosts= {{hostvars}}! "
   
 
-# - hosts: all
-  # # serial: 1
-  # tasks:
-    # - debug: msg="[tenant-create] je suis {{ inventory_hostname }} du groupe {{ group_names }}! "
-    # # - debug: msg={{ ansible_ssh_host }}
-    # - ping:
-      # register: first_ping
+- hosts: just_created
+  # serial: 1
+  tasks:
+    - debug: msg="[tenant-create] je suis {{ inventory_hostname }} du groupe {{ group_names }}! "
+    - debug: var=hostvars["{{ inventory_hostname }}"]['ansible_default_ipv4']
+    # - debug: msg={{ ansible_ssh_host }}
+    - ping:
+      register: first_ping
     # - name: rerun setup
       # setup:
     # - name: get hostname

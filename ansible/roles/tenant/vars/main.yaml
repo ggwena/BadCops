@@ -21,14 +21,14 @@ PF_APP:
   RTV_RTE: 
     code: RTE
     group: RTV_RTE
+    image_id: "d48f697e-7bb7-4c4d-b1c0-76674ac2cf47"
     number: 2
   RTV_WC: 
     code: WC
-    number: 3
+    number: 2
     # group: RTV_WC
-    image_id: "d48f697e-7bb7-4c4d-b1c0-76674ac2cf47"
     # flavor_id: 17
-    security_groups: "default,SSH_Only"
+    security_groups: "test_G"
     # nics_net_id: "c65b4845-fdae-4196-b68b-865ec32dbc84"
 
 

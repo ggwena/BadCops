@@ -1,0 +1,8 @@
+#cloud-config
+bootcmd:
+  - echo "#erased by cloud-init" > /etc/resolv.conf
+  - echo "PEERDNS=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+  # - manage_etc_hosts: true
+ssh_authorized_keys:
+  - ssh-rsa  AAAAB3NzaC1yc2EAAAABIwAAAQEAoXSjjmUlmvmzAGj9q8Jjf9qJq5/7RPxmGoHfyv4//xXueFjn+A1iPszbdm80XjtSs5/1zGTBc2nA9wwssqtlFW1UKiZ7XXeOfA7bzb+RUrqGVQN4H2nqSlhp9ytysqeyd/Xo5O0ViACQbuOhQ86h2aE8b7YLvv5vgQ4jXZcTAEI2ng2reIFkuwRbrQjaiTbR20J5a79eBcKQ9mM7ZMpokH9jaoP9RGFIfUJvexTlL8zESSCwlo5VuruUeHmSs5P2+Ye0jYtCJ+lz09s2+NWUqhytgrVgj/2I+867ey9ycKK7e1eXs0jusjo3Faauui7gNBa2lMKjNqmoAY95DUFrzQ== cloud@in-bad-dev1-gll-01
+

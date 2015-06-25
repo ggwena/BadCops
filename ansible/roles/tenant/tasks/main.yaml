@@ -7,9 +7,9 @@
     - debug: msg="APP={{PF_APP | to_nice_yaml}} "
     
     # - debug: msg="include= addhost2inventory.yaml APP={{PF_APP["RTV_RTE"]}} "
-    - include: addhost2inventory.yaml APP={{PF_APP["RTV_DB"]}} 
-    - include: addhost2inventory.yaml APP={{PF_APP["RTV_RTE"]}} 
-    - include: addhost2inventory.yaml APP={{PF_APP["RTV_WC"]}} 
+    # - include: addhost2inventory.yaml APP={{PF_APP["RTV_DB"]}} 
+    # - include: addhost2inventory.yaml APP={{PF_APP["RTV_RTE"]}} 
+    # - include: addhost2inventory.yaml APP={{PF_APP["RTV_WC"]}} 
     
     - include: instance_create.yaml APP={{PF_APP["RTV_WC"]}} 
     
