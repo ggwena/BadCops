@@ -1,0 +1,80 @@
+---
+# file: roles/tenant/tasks/instance_create.yaml
+# vars: 
+  # APP:  
+    # 'code': 'RTE', 'group': 'AS', 'number': 2
+    # image_id: "{{APP.image_id|default(PF_APP_image_id_default)}}"
+    # flavor_id: "{{APP.flavor_id|default(PF_APP_flavor_id_default)}}"
+    # security_groups: "{{APP.security_groups|default(PF_APP_security_groups_default)}}"
+    # nics_net_id: "{{APP.nics_net_id|default(PF_APP_nics_net_id_default)}}"
+
+  - debug: msg="Bonjour, je suis {{ inventory_hostname }} ! " 
+  # - debug: msg="[addhost2inventory.yaml] Adding {{APP.code}} in group {{APP.group| default(PF_APP_default_group)}}, {{APP.number | default(PF_APP_default_number) }} times "
+  - debug: msg="[instance_create.yaml] Booting instance type {{APP.code}}, image_id={{APP.image_id|default(PF_APP_image_id_default)}} flavor_id={{APP.flavor_id|default(PF_APP_flavor_id_default)}}"
+    with_sequence: start=1 end={{APP.number|default(PF_APP_number_default)}} format={{PF_prefix|default(PF_prefix_default)}}-{{APP.code}}-%02x
+  
+  - name: Booting an instance
+    # become: no
+    nova_compute:
+      name: "{{ item }}"
+      state: present
+      login_username: "{{ lookup('env', 'OS_USERNAME') }}"
+      login_password: "{{ lookup('env', 'OS_PASSWORD') }}"
+      login_tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+      auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+      region_name: fr1
+      image_id: "{{APP.image_id|default(PF_APP_image_id_default)}}"
+      flavor_id: "{{APP.flavor_id|default(PF_APP_flavor_id_default)}}"
+      key_name: "{{PF_APP_key_name_default}}"
+      meta: 
+        ansible: yes
+      security_groups: "{{APP.security_groups|default(PF_APP_security_groups_default)}}"
+      # user_data: $HOME/BadCops/cloudwatt/user_data_file.yaml
+      # user_data: "{{ lookup('file', '../cloudwatt/user_data_file.yaml') }}"
+      user_data: "{{ lookup('file', 'cloud-init-platon.yaml') }}"
+      wait_for: 120
+      # user_data: '#cloud-config\nbootcmd:\n  - echo "#erased by cloud-init" > /etc/resolv.conf \nmanage_etc_hosts: true\nssh_authorized_keys:\n  - ssh-rsa  AAAAB3NzaC1yc2EAAAABIwAAAQEAoXSjjmUlmvmzAGj9q8Jjf9qJq5/7RPxmGoHfyv4//xXueFjn+A1iPszbdm80XjtSs5/1zGTBc2nA9wwssqtlFW1UKiZ7XXeOfA7bzb+RUrqGVQN4H2nqSlhp9ytysqeyd/Xo5O0ViACQbuOhQ86h2aE8b7YLvv5vgQ4jXZcTAEI2ng2reIFkuwRbrQjaiTbR20J5a79eBcKQ9mM7ZMpokH9jaoP9RGFIfUJvexTlL8zESSCwlo5VuruUeHmSs5P2+Ye0jYtCJ+lz09s2+NWUqhytgrVgj/2I+867ey9ycKK7e1eXs0jusjo3Faauui7gNBa2lMKjNqmoAY95DUFrzQ== cloud@in-bad-dev1-gll-01\n'
+      nics:
+        - net-id: "{{APP.nics_net_id|default(PF_APP_nics_net_id_default)}}"
+      # auto_floating_ip: yes
+      # floating_ip_pools: public
+      #      floating_ips: 
+      #        - "84.39.36.39"
+    with_sequence: start=1 end={{APP.number|default(PF_APP_number_default)}} format=IN-BAD-DEV1-{{APP.code}}-%02x
+    register: instance
+    
+  # - debug: var=instance
+  - debug: msg="Server {{ item.info.name }} changed={{item.changed}} with ip={{ item.private_ip }}, ip[0]={{ item.private_ip[0] }}, ip={{ item.public_ip }}"
+    with_items: instance.results
+
+# - name: Fail if return code is not 0
+    # fail:
+      # msg: "The command ({{ item.item }}) did not have a 0 return code"
+    # when: item.rc != 0
+    # with_items: "{{instance.results}}"
+
+# - debug: msg="Server {{ instance.result.[0].info.name }} created with ip={{ instance.result.[0].private_ip }} ip={{ instance.result.[0].public_ip }}" 
+  # - debug: msg="Server {{ instance.result.[0].info.name }} created with ip={{ instance.result.[0].private_ip }} ip={{ instance.result.[0].public_ip }}" 
+
+
+  - name: Wait for SSH on Instance to become available
+    wait_for:
+      port: 22
+      host: "{{ item.private_ip[0] }}"
+      timeout: 60
+      # state: started
+    with_items: instance.results
+    register: result
+  
+  - add_host:
+      name: "{{item.info.name}}"
+      groups: "just_created,ansible"
+      ansible_ssh_host: "{{ item.private_ip[0] }}"
+      ansible_ssh_user: osadmin
+      # ansible_connection: local   ### TEMP
+    with_items: instance.results
+    register: result
+  # - debug: var=result
+ 
+  
+  

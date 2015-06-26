@@ -1,0 +1,73 @@
+---
+# file: roles/tenant_secgroups/vars/main.yaml
+
+SG_prefix_default: TST
+
+SG_direction_default: "ingress"
+SG_state_default: "present"
+
+SG_APP_code_default: XXX
+SG_APP_group_default: YYY
+SG_APP_number_default: 1
+SG_APP_image_id_default: 4a4fdbd8-68da-4026-83d0-d2492e19e40b # CB_G2R3_Cloud_03_20G
+  # - image_id: d48f697e-7bb7-4c4d-b1c0-76674ac2cf47 # "CentOS 6.5"
+  # - image_id: 4a4fdbd8-68da-4026-83d0-d2492e19e40b # CB_G2R3_Cloud_03_20G
+SG_APP_flavor_id_default: 16 
+SG_APP_key_name_default: KP_BadCops-Dev_GLL
+SG_APP_security_groups_default: default
+SG_APP_nics_net_id_default: da0612d8-f507-4dbb-912d-c20786ee184d
+
+
+PF_SG:  # global variables of Security Groups for Platform
+  RTV_RTE_vide:  # SG name
+    name: titi
+    description: test for titi
+    rules:
+  RTV_RTE:  # SG name
+    name: titi
+    description: test for titi
+    rules:
+      - direction: "ingress"
+        port_range_min: "80"
+        port_range_max: "80"
+        ethertype: "IPv4"
+        protocol: "tcp"
+        remote_ip_prefix: "10.0.0.1/24"
+      - direction: "ingress"
+        port_range_min: "22"
+        port_range_max: "22"
+        ethertype: "IPv4"
+        protocol: "tcp"
+        remote_group_name: 'default'
+  RTV_WC:  # SG name
+    name: RTV_WC
+    description: test for toto
+    rules:
+      - direction: "ingress"
+        port_range_min: "80"
+        port_range_max: "80"
+        ethertype: "IPv4"
+        protocol: "tcp"
+        remote_ip_prefix: "0.0.0.0/0"
+
+
+
+
+      # rule1:    # rules
+        # direction: "toto"
+        # port_range_min: 8080
+        # port_range_max: 8080
+        # ethertype: "IPv4"
+        # protocol: "tcp"
+        # remote_ip_prefix: "192.0.0.1/24"
+        # # remote_group_name: default
+        # # remote_group_id: 
+      # rule2:    # rules
+        # direction: "egress"
+        # port_range_min: 8080
+        # port_range_max: 8080
+        # ethertype: "IPv4"
+        # protocol: "tcp"
+        # remote_ip_prefix: "192.0.0.2/24"
+        # # remote_group_name: default
+        # # remote_group_id: 

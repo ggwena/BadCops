@@ -1,0 +1,74 @@
+---
+# file: roles/tenant_SG/tasks/create-secgroup.yaml
+# vars: 
+  # PF:  
+    # 'code': 'RTE', 'group': 'AS', 'number': 2
+    # image_id: "{{APP.image_id|default(PF_APP_image_id_default)}}"
+    # flavor_id: "{{APP.flavor_id|default(PF_APP_flavor_id_default)}}"
+    # security_groups: "{{APP.security_groups|default(PF_APP_security_groups_default)}}"
+    # nics_net_id: "{{APP.nics_net_id|default(PF_APP_nics_net_id_default)}}"
+  
+  - debug: msg="create-secgroup name={{SG.name}} SG_state={{SG_state|default(SG_state_default)}} rules={{SG.rules|to_nice_yaml}}"
+  # - debug: var={{SG|to_nice_yaml}}
+  # - debug: msg="SG rule item={{item.key}} value={{item.value}} direction={{item.value.direction}}"
+    # with_dict: SG.rules
+   
+  # - debug: msg="SG= direction={{SG["rules"][0].direction|default(SG_direction_default)}} "
+    
+  - name: create a security group and rules
+    neutron_sec_group:
+      login_username: "{{ lookup('env', 'OS_USERNAME') }}"
+      login_password: "{{ lookup('env', 'OS_PASSWORD') }}"
+      login_tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+      login_tenant_id: "{{ lookup('env', 'OS_TENANT_ID') }}"
+      auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+      #tenant_name: DONT! 
+      # region_name: "fr1"
+      name: "SG_{{SG_prefix|default(SG_prefix_default)}}_{{SG.name}}"
+      state: "{{SG_state|default(SG_state_default)}}"
+      # provider_network_type: local 
+      # router_external: yes
+      # shared: no
+      rules:
+        # - parameters: direction, port_range_min, port_range_max, ethertype, protocol,
+        #   remote_ip_prefix|remote_group_id|remote_group_name"
+        "{{SG.rules }}"
+        
+        # - direction: "{{SG.direction|default(SG_direction_default)}}"
+          # port_range_min: "80"
+          # port_range_max: "81"
+          # ethertype: "IPv4"
+          # protocol: "tcp"
+          # remote_ip_prefix: "192.0.0.4/24"
+    register: result
+  
+  - debug: var=result
+  
+  
+  # - name: create a security group
+    # become: no
+    # neutron_sec_group:
+      # login_username: "{{ lookup('env', 'OS_USERNAME') }}"
+      # login_password: "{{ lookup('env', 'OS_PASSWORD') }}"
+      # login_tenant_name: "{{ lookup('env', 'OS_TENANT_NAME') }}"
+      # login_tenant_id: "{{ lookup('env', 'OS_TENANT_ID') }}"
+      # auth_url: "{{ lookup('env', 'OS_AUTH_URL') }}"
+      # #tenant_name: DONT! 
+      # # region_name: "fr1"
+      # name: "{{SG_prefix_default}}TST1"
+      # state: present
+      # # provider_network_type: local 
+      # # router_external: yes
+      # # shared: no
+      # rules:
+        # # - parameters: direction, port_range_min, port_range_max, ethertype, protocol,
+        # #   remote_ip_prefix|remote_group_id|remote_group_name"
+        # - direction: "{{APP.direction|default(PF_APP_image_id_default)}}"
+          # port_range_min: "80"
+          # port_range_max: "80"
+          # ethertype: "IPv4"
+          # protocol: "tcp"
+          # remote_ip_prefix: "192.0.0.1/24"
+    # register: result
+  
+  # - debug: var=result

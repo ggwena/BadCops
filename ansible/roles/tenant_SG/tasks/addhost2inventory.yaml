@@ -1,0 +1,41 @@
+---
+# file: roles/tenant/tasks/addhost2inventory.yaml
+# vars: 
+  # APP={'code': 'RTE', 'group': 'AS', 'number': 2} 
+# - tasks:
+
+    # - debug: msg="[addhost2inventory.yaml] Defaults  group={{PF_APP_default_group}}, number={{PF_APP_default_number}}"
+    # - debug: msg="[tenant/tasks/addhost2inventory] APP={{APP}} "
+    # - debug: msg="[addhost2inventory.yaml] Adding {{APP.code}} in group {{APP.group| default(PF_APP_default_group)}}, {{APP.number | default(PF_APP_default_number) }} times "
+    - debug: msg="[addhost2inventory.yaml] AddHost {{item}} in group {{APP.group|default(PF_APP_group_default)}}"
+      with_sequence: start=1 end={{APP.number|default(PF_APP_number_default)}} format={{PF_prefix|default(PF_prefix_default)}}-{{APP.code}}-%02x
+
+    - add_host:
+        name: "{{item}}"
+        groups: "{{APP.group|default(PF_APP_group_default)}}"
+        ansible_connection: local   ### TEMP
+      with_sequence: start=1 end={{APP.number|default(PF_APP_number_default)}} format=IN-BAD-DEV1-{{APP.code}}-%02x
+    
+    # - debug: msg="[GWENN.yaml] AddHost {{item}} in group {{code}}"
+      # with_sequence: start=1 end={{PF_number}} format=IN-BAD-DEV1-{{code}}-%02x
+    # - debug: msg="[GWENN] code={{code}} PF_number={{ PF_number}}"
+    # - debug: msg="[GWENN] PF_APP={{PF_APP}}"
+    # - debug: msg="Creating {{item}} ."
+      # with_sequence: start=1 end={{PF_number}} format=IN-BAD-DEV1-GLL-%02x
+    # - debug: msg="j'ai {{ item }}"
+      # with_items: "{{a}}"
+      # # with_items: "{{g_APP.DB}}"
+    # - debug: msg="For {{ item.key }} need to create {{ item.value.code }} , but {{ item.value.number }} times!"
+      # with_dict: "{{g_APP}}"
+
+    # - debug: msg="[GWENN.yaml] AddHost {{item}} in group {{code}}"
+      # with_sequence: start=1 end={{PF_number}} format=IN-BAD-DEV1-{{code}}-%02x
+
+    # - add_host:
+       # name: "test_{{ item }}"
+       # ansible_ssh_host: 127.0.0.1
+       # groups: my_test
+       # ansible_connection: local
+       # oshost: "{{ item }}"
+     # with_items: tests
+  
