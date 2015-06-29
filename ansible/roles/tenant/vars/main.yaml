@@ -22,10 +22,10 @@ PF_APP:
     code: RTE
     group: RTV_RTE
     image_id: "d48f697e-7bb7-4c4d-b1c0-76674ac2cf47"
-    number: 2
+    number: 1
   RTV_WC: 
     code: WC
-    number: 2
+    number: 1
     # group: RTV_WC
     # flavor_id: 17
     security_groups: "test_G"

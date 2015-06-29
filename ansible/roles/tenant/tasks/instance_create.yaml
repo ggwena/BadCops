@@ -27,7 +27,7 @@
       flavor_id: "{{APP.flavor_id|default(PF_APP_flavor_id_default)}}"
       key_name: "{{PF_APP_key_name_default}}"
       meta: 
-        ansible: yes
+        ansible: "yes"
       security_groups: "{{APP.security_groups|default(PF_APP_security_groups_default)}}"
       # user_data: $HOME/BadCops/cloudwatt/user_data_file.yaml
       # user_data: "{{ lookup('file', '../cloudwatt/user_data_file.yaml') }}"

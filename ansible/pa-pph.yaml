@@ -1,0 +1,125 @@
+---
+# file: pa-pph.yaml
+# install PA-PPH-SCL54R6-RDG02R01C03.tar
+# create instance
+
+- name: install PA-PPH-SCL54R6-RDG02R01C03.tar
+  hosts: test
+  vars:
+    pli_apache: PA-APA-APA2215-RDG02R01C05
+    pli_php: PA-PPH-SCL54R6-RDG02R01C03
+    file_snitch_rpm: snitch-2.0-0.noarch.rpm
+
+  roles:
+    # - { name: tenant, ensure: present }
+    # - tenant_SG 
+
+  tags: install
+  # serial: 1
+  tasks:
+    - debug: msg="[tenant-create] Play-book a destination de {{ play_hosts }}"
+    # - debug: msg="[tenant-create] Groups et leur hosts= {{groups|to_nice_yaml}}! "
+    # - debug: msg="[tenant-create] hosts= {{hostvars}}! "
+    - ping: 
+    - name: chown osadmin. /images
+      become: yes
+      file: 
+        path: /images
+        owner: osadmin
+        group: osadmin
+
+    - name: copy PLI Apache to images
+      copy: src=files/{{ pli_apache }}.tar dest=/images
+      register: result
+    - name: create directory in images
+      file: path=/images/apache/2.2.15 state=directory mode=0755
+    - name: unarchive existing file
+      unarchive: src=/images/{{ pli_apache }}.tar dest=/images/apache/2.2.15 copy=no
+      when: result|changed
+    - name: install apache
+      command: ./apa_install.ksh chdir=/images/apache/2.2.15 creates=/etc/signatures/{{ pli_apache }}.SIG
+      become: yes
+      register: result
+    # - debug: var=result
+    
+
+
+    - name: copy PLI to images
+      copy: src=files/{{ pli_php }}.tar dest=/images
+      register: result
+    - name: create directory in images
+      file: path=/images/php/5.4 state=directory mode=0755
+    - name: unarchive existing file
+      unarchive: src=/images/{{ pli_php }}.tar dest=/images/php/5.4 copy=no
+      when: result|changed
+    - name: install php
+      command: ./install_phpscl.ksh chdir=/images/php/5.4 creates=/etc/signatures/{{ pli_php }}.SIG
+      become: yes
+      register: result
+
+    - name: Create instance php
+      shell: ./apa_creinstance.ksh bad phpscl g00r00c00 bad bad infravg 200 n y 80 n na na eth0 y    chdir=/opt/apache/bin/   creates=/opt/application/bad/apache2215/current/conf/
+      become: yes
+      register: result
+    - debug: var=result
+    
+    ## crée un vhost-bad.conf :(
+    # - name: listen on all interfaces
+      # lineinfile: dest=/opt/application/bad/apache2215/current/conf.d/vhost-bad.conf regexp="^Listen " insertafter="^#Listen " line="Listen 80" backup=yes
+      # become: yes
+      # notify:
+        # - restart apache
+    # - name: virtualhost on all interfaces
+      # lineinfile: dest=/opt/application/bad/apache2215/current/conf.d/vhost-bad.conf regexp="^<VirtualHost .*80>" line="<VirtualHost *:80>" backup=yes
+      # become: yes
+      # notify:
+        # - restart apache
+    - name: remove vhost-bad.conf
+      file: path=/opt/application/bad/apache2215/current/conf.d/vhost-bad.conf state=absent
+      
+    - name: start apache service
+      service: name=httpd enabled=yes state=started
+      become: yes
+      
+    - name: copy snitch RPM to images
+      copy: src=files/{{ file_snitch_rpm }} dest=/images
+    - name: install snitch rpm
+      yum: name=/images/{{ file_snitch_rpm }} state=present
+      become: yes
+
+    - local_action: wait_for port=22 host="{{ ansible_ssh_host | default(inventory_hostname) }}" timeout=30
+
+    # Check that a page returns a status 200 and fail if the word AWESOME is not in the page contents.
+    - name: check snitch test page
+      uri: url=http://{{ ansible_ssh_host | default(inventory_hostname) }}/test return_content=yes
+      delegate_to: 127.0.0.1
+      register: webpage
+    # - name: check snitch test page
+      # get_url: url=http://{{ ansible_ssh_host | default(inventory_hostname) }}/test dest=/tmp/
+      # register: webpage
+    - debug: var=webpage
+    - action: fail
+      when: "'OK' not in webpage.content"
+  
+
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted
+      become: yes
+
+
+
+
+# 115  2015/05/15 11:12:05  :: cd /opt/apache/bin/
+# ./apa_creinstance.ksh bad phpscl g00r00c00 bad bad infravg 200 n y 80 n na na eth0 y
+# ln -s /opt/application/bad/php/current/public
+# ln -s /opt/application/bad/apache2215/current/
+# 152  2015/05/15 11:29:48  :: vim public/index.php
+# 153  2015/05/15 11:30:03  :: curl http://10.100.0.17/
+# listen *   156  2015/05/15 11:31:08  :: vim current/conf.d/vhost-bad.conf
+# 157  2015/05/15 11:31:54  :: service httpd restart
+# 158  2015/05/15 11:32:25  :: curl http://localhost/
+
+
+
+
